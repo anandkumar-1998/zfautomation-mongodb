@@ -1,0 +1,12 @@
+
+.select2-container * {
+    outline: none !important;
+}
+.select2-selection__clear {
+    /* margin-right: 35px !important; */
+}
+.select2-selection {
+    /* border-color: #7267EF; */
+    -webkit-box-shadow: 0 0 0 0rem rgb(114 103 239 / 25%) !important;
+    box-shadow: 0 0 0 0rem rgb(114 103 239 / 25%) !important;
+}

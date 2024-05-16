@@ -1,0 +1,50 @@
+{
+  "hosting": [
+    {
+      "public": "out",
+      "cleanUrls": true,
+      "target": "sitename",
+      "ignore": [
+        "firebase.json",
+        "*/.",
+        "*/node_modules/*"
+      ]
+    },
+    {
+      "target": "apisitename",
+      "public": "out",
+      "cleanUrls": true,
+      "ignore": [
+        "firebase.json",
+        "*/.",
+        "*/node_modules/*"
+      ],
+      "rewrites": [
+        {
+          "source": "/postweightslip",
+          "function": "postweightslip"
+        },
+        {
+          "source": "**",
+          "destination": "/404.html"
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

@@ -1,0 +1,397 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "ConfirmationMaterialDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "LGORT",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "STATUS",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "MBLNR",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ConfirmationMaterialDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "STATUS",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "MBLNR",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ErrorMaterialScanningEntries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "storagelocation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "scantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ErrorMaterialScanningEntries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "storagelocation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "scantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "IssueDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "RCD_LOC",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "IssueDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "RCD_LOC",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ISSUE_NUMBER",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "IssueDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "RCD_LOC",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ISSUE_TIMESTAMP",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "IssueDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ISSUE_NUMBER",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "IssueDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ISSUE_TIMESTAMP",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "IssueDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "RES_ITEM",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "MaterialScanningEntries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "scantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "MaterialScanningEntries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "storagelocation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "scantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PendingProductionConfirmationDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "lastscantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PendingProductionConfirmationDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "storagelocation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "lastscantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "PendingProductionConfirmationDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "lastscantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ProductionConfirmationDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "dateuid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "lastscantimestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ReferenceDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "REF_NUMBER",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "RES_ITEM",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ReferenceDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "RES_ITEM",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "TransferTransitStockDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "LGORT",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "TransitStockDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "MATERIAL",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "TransitStockDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "RCD_LOC",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "TransitStockDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "REF_NUMBER",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "RES_ITEM",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "TransitStockDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "RES_NO",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "TransitStockDetails",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "STORE_LOC",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TR_QUAN",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
