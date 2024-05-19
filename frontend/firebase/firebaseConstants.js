@@ -58,3 +58,7 @@ export const MASTERMODULE = {
 export const PLANTCODES = {
     "1000": "PUNE PLANT",
 }
+
+export const PLANTPRIORITY = ["low", "medium", "high", "very high"];
+export const PLANTSTATUS = ['open', "closed", "waiting", "on hold"];
+export const PLANTIMPACT = ['standard',"high","low"];
