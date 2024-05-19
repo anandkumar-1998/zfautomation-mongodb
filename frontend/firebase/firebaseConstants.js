@@ -56,6 +56,5 @@ export const MASTERMODULE = {
     },
 }
 export const PLANTCODES = {
-
     "1000": "PUNE PLANT",
 }

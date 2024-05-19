@@ -4,14 +4,13 @@ import Sidebar from '../components/sidebar'
 import Navbar from '../components/navbar'
 import Head from '../components/head'
 import { WEBAPPTITLE } from '../constants/appconstants'
+import AddTIcket from '../components/Tickets/AddTIcket'
 const Home = () => {
 
     useEffect(() => {
        utility.hideloading()
 
     }, [])
-
-
     return (
 
 
@@ -28,27 +27,18 @@ const Home = () => {
                     <div className="page-content">
                         <section className="pc-container d-flex flex-column p-1">
                             <div className="pcoded-content  d-flex flex-column flex-grow-1 p-1">
-
-
-                                <div className="flex-grow-1 d-flex flex-column"
-
+                                {/* <div className="flex-grow-1 d-flex flex-column"
                                     style={{ height: "95vh" }}
-
-
                                 >
                                     <img src="../assets/images/zfplant.jpg" className="img-fluid rounded shadow h-100" />
 
-                                </div>
-
-
-
+                                </div> */}
+                                <AddTIcket />
                             </div>
                         </section>
                     </div>
                 </div>
             </div>
-
-        
 
         </main >
 

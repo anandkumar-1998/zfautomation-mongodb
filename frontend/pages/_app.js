@@ -4,6 +4,7 @@ import "tippy.js/dist/backdrop.css";
 import "tippy.js/animations/shift-away.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "notyf/notyf.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css'
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "remixicon/fonts/remixicon.css";
