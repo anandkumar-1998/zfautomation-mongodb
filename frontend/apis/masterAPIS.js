@@ -1,25 +1,25 @@
-
 import { DB_APIURL, EMPLOYEE_TOKEN } from "../constants/appconstants";
 import { get_keyvalue } from "../libraries/utility";
 const axios = require("axios").default;
-
-export const RequestLiveDate = async (isIPCheckRequired) => {
-    const getLiveDate = httpsCallable(functions, 'getLiveDate');
-    var data = getLiveDate({ isIPCheckRequired })
-        .then((result) => {
-            // console.log("DATE: " + result.data);
-            return result.data;
+export const RequestLiveDate = async () => {
+    return await axios
+        .get(DB_APIURL + "getLiveDate", {
+            params: {
+            },
         })
-        .catch((error) => {
-            console.error("ERROR : " + JSON.stringify(error));
-            return data = {
+        .then(function (response) {
+            // handle success
+            console.log(response.data);
+            return response.data
+        })
+        .catch(function (error) {
+            return {
                 status: false,
                 data: "na",
-                message: error.message
+                message: error.response?.data.message || ""
             }
         })
 
-    return data;
 }
 
 export const RequestCheckUser = async (username) => {

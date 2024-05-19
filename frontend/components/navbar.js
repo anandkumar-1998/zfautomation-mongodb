@@ -29,7 +29,7 @@ const Navbar = ({ pagename, employeename, employeedesignation, collapseSidebarIn
 
   return (
     <div>
-      {/* <div className="pc-mob-header pc-header">
+      <div className="pc-mob-header pc-header">
         <div className="pcm-logo">
           <img src="../assets/images/logo.svg" alt="" className="logo logo-lg" />
         </div>
@@ -48,24 +48,16 @@ const Navbar = ({ pagename, employeename, employeedesignation, collapseSidebarIn
             <i data-feather="more-vertical"></i>
           </a>
         </div>
-      </div> */}
+      </div>
 
-      <header style={{ left: 0 }} className="pc-header d-flex flex-fill flex-grow-1 row px-2 m-0">
-        <div className="col-10 d-flex px-0">
-
-          <div className="page-header-title align-items-center d-flex flex-row my-auto">
-            <a href="../../../home" className="d-flex p-1" style={{ height: "40px" }}>
-              <img src="../../../assets/images/loginlogo.svg" alt="" className="img-fluid h-100" />
-            </a>
-            <span className="text-dark text-md ms-2 f-w-800 text-capitalize">{process.env.NEXT_PUBLIC_ENVTYPE === "dev" ? "dev : " + pagename : "" + pagename}</span>
+      <header className="pc-header d-flex flex-fill flex-grow-1 row ps-4 pe-2">
+        <div className="col-6 d-flex px-0">
+          <div className="page-header-title my-auto">
+            <span className="text-dark text-md f-w-800 text-capitalize">{process.env.NEXT_PUBLIC_ENVTYPE === "dev" ? "dev : " + pagename : "" + pagename}</span>
           </div>
         </div>
-        <div className="col-2 p-0 d-flex flex-row align-items-center justify-content-end">
-          <a onClick={() => utility.signOutUser()} className="w-auto d-flex align-items-center py-2 ms-auto me-0">
-            {/* <i className="ri-logout-circle-line text-danger mt-0 fs-4 me-1"></i> */}
-            <span className="text-danger text-sm fw-bold">LOGOUT</span>
-          </a>
-          {/* <ul className="list-unstyled">
+        <div className="col-6 d-flex flex-row align-items-center justify-content-end">
+          <ul className="list-unstyled">
             <li className="dropdown pc-h-item">
               <a
                 className="pc-head-link dropdown-toggle arrow-none me-0 p-2 "
@@ -84,10 +76,14 @@ const Navbar = ({ pagename, employeename, employeedesignation, collapseSidebarIn
                   <i className="ri-logout-box-line mt-0 fs-6"></i>
                   <span>Logout</span>
                 </a>
-              
+                {/* <hr className="m-2 text-muted" />
+                <a onClick={() => openUserManual()} className="dropdown-item d-flex align-items-center py-2">
+                  <i className="ri-question-fill mt-0 fs-6"></i>
+                  <span>User Manual</span>
+                </a> */}
               </div>
             </li>
-          </ul> */}
+          </ul>
         </div>
       </header>
     </div>

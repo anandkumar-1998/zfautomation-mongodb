@@ -1,5 +1,6 @@
-const DEVICE_URL = "http://192.168.31.193" // this will be the IP of Device on which DB is Hosted.
-const DB_PORT = "3030"
+export const DEVICE_URL = "http://192.168.1.34"; // this will be the IP of Device on which DB is Hosted.
+// export const DEVICE_URL = "http://192.168.100.97"; // this will be the IP of Device on which DB is Hosted.
+export const DB_PORT = "3030";
 
 export const EMPLOYEE_TOKEN = "EMPLOYEE_TOKEN";
 export const EMPLOYEE_ID = "EMPLOYEE_ID";``

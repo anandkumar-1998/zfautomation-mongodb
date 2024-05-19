@@ -13,16 +13,14 @@ import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-fixedheader-bs5/js/fixedHeader.bootstrap5.js"
 import "datatables.net-select-bs5/js/select.bootstrap5"
 import { useSnackbar } from 'notistack'
-import { db } from '../../firebase/firebaseconfig'
-import { arrayUnion, collection, doc, getDocs, orderBy, query, setDoc } from 'firebase/firestore'
-const selectedUserUID = ""
-const selectedUserDoc = null
+import { RequestAddorUpdateUser, RequestGetAllUsers } from '../../apis/masterAPIS'
+const selectedEmployeeUID = ""
+const selectedEmployeeDoc = null
 
-const Users = ({ module }) => {
+const Employees = () => {
+
     const [plantchoices, setplantchoices] = useState(null);
-
-    const [storagelocationchoices, setstoragelocationchoices] = useState(null);
-    const [allUserDocs, setUserDocs] = useState([])
+    const [allEmployeeDocs, setEmployeeDocs] = useState([])
     const [selectedModules, setselectedModules] = useState([])
     const [contentModal, setcontentModal] = useState(null);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -35,26 +33,23 @@ const Users = ({ module }) => {
     }
 
     useEffect(() => {
-        if (allUserDocs.length > 0) {
-            allUserDocs.map((employee, index) => {
+        if (allEmployeeDocs.length > 0) {
+            allEmployeeDocs.map((employee, index) => {
                 var status = `<span class="badge bg-success p-2">ACTIVE</span>`
 
                 if (!employee.isactive) {
                     status = `<span class="badge bg-danger p-2">IN-ACTIVE</span>`
                 }
 
-
-
                 var rowitem = `<tr>
                                 <td class="text-sm f-w-500">${index + 1}.</td>
                                 <td class="text-sm f-w-500">${employee.username}</td>
                                 <td class="text-sm f-w-500">${employee.name}</td>
-                                <td class="text-sm f-w-500">${employee.password}</td>
-                                <td class="text-sm f-w-500">${employee.storagelocation}-${fbc.STORAGELOCATION[employee.storagelocation]}</td>
+                                <td class="text-sm f-w-500">${employee.phonenumber}</td>
                                 <td class="text-sm f-w-500">${status}</td>
                                  <td class="align-middle">
                                 <button
-                                    id=${employee.useruid}
+                                    id=${employee._id}
                                     class="btn btn-sm text-xs btn-outline-primary  w-100"
                                 >
                                     EDIT
@@ -63,20 +58,19 @@ const Users = ({ module }) => {
 
 
                 $("#employeestablebody").append(rowitem)
-                $("#" + employee.useruid).on("click", function () {
-                    modifyUser(this.id);
+                $("#" + employee._id).on("click", function () {
+                    modifyEmployee(this.id);
                 });
             })
 
 
-            console.log($(document).height());
 
             var datatable = $("#employeestable").DataTable({
                 info: false,
                 dom: "Rlfrtip",
                 autoWidth: false,
                 orderCellsTop: true,
-                scrollY: ($(window).height() * 0.75) + "px",
+                scrollY: ($(".tablediv").height() - 10) + "px",
                 scrollCollapse: true,
                 paging: false,
                 scrollX: true,
@@ -85,9 +79,9 @@ const Users = ({ module }) => {
                     footer: true
                 },
                 columnDefs: [
-                    { width: "2%", targets: [0, 5, 6] },
-                    { width: "5%", targets: [1, 3, 2] },
-                    // { width: "15%", targets: [4] },
+                    { width: "2%", targets: [0, 5] },
+                    { width: "5%", targets: [1, 4] },
+                    { width: "15%", targets: [3] },
                 ]
             }
             );
@@ -98,26 +92,23 @@ const Users = ({ module }) => {
             $(".dataTables_filter").addClass('d-none')
         }
 
-    }, [allUserDocs])
+    }, [allEmployeeDocs])
 
 
 
-    const modifyUser = (uid) => {
+    const modifyEmployee = (uid) => {
         console.log(uid);
-        allUserDocs.map(employee => {
-            if (employee.useruid == uid) {
+        allEmployeeDocs.map(employee => {
+            if (employee._id == uid) {
                 toggleModal()
-                selectedUserDoc = employee;
-                selectedUserUID = uid
+                selectedEmployeeDoc = employee;
+                selectedEmployeeUID = uid
 
-                if (storagelocationchoices != null) {
-                    storagelocationchoices.setChoiceByValue(employee.storagelocation)
-                }
                 if (plantchoices != null) {
-                    plantchoices.setChoiceByValue(employee.plant||"1000")
+                    plantchoices.setChoiceByValue(employee.plant)
                 }
                 $("#fullname").val(employee.name)
-                $("#password").val(employee.password)
+                $("#phonenumber").val(employee.phonenumber)
                 $("#loginid").val(employee.username)
                 utility.disableinput("loginid")
                 $("#employeestatusswitch").prop('checked', employee.isactive).trigger('change');
@@ -140,18 +131,19 @@ const Users = ({ module }) => {
     useEffect(() => {
 
 
-        Object.keys(fbc.MODULES.modules).map(key => {
-            $("#accesscheckboxdiv").append(` <div class="p-2 bg-light border rounded me-2 mt-2">
+        Object.keys(fbc.MASTERMODULE.modules).map(key => {
+            $("#uploadcheckboxdiv").append(` <div class="p-2 bg-light border rounded me-2 mt-2">
                                             <div class="form-check mb-0">
-                                                <input class="form-check-input input-success adminallowed modules me-3" value="${key}" type="checkbox" id="${key.toLowerCase()}" />
+                                                <input class="form-check-input input-success modules me-3" value="${key}" type="checkbox" id="${key.toLowerCase()}" />
                                                 <label class="form-check-label mb-0 me-3" for="${key.toLowerCase()}">
-                                                    ${fbc.MODULES.modules[key].label}
+                                                    ${fbc.MASTERMODULE.modules[key].label}
                                                 </label>
                                             </div>
                                         </div>`)
         })
 
 
+        // addModule("Masters", fbc.TIMEOFFICE_HRREPORTS)
 
         loadData()
 
@@ -210,21 +202,20 @@ const Users = ({ module }) => {
     }
 
 
-    async function getAllUsers() {
+    async function getAllEmployees() {
         utility.showloading()
-        const q = query(
-            collection(db, "UsersDetails"),
-            orderBy("username", "desc")
-        );
-        var data = []
-        const querySnapshot = await getDocs(q);
-        utility.hideloading();
-        console.log(querySnapshot.size);
-        querySnapshot.forEach((doc) => {
-            data.push(doc.data())
-        });
-        setUserDocs(data)
-        utility.store_newvalue("counter_" + module, data.length)
+        var fetchAllUsers = await RequestGetAllUsers()
+        if (fetchAllUsers.success) {
+            console.log(fetchAllUsers.data);
+            setEmployeeDocs(fetchAllUsers.data)
+        } else {
+            utility.hideloading()
+            console.log('Unsuccessful returned error', fetchAllUsers.message);
+            errorCallback({
+                message: fetchAllUsers.message
+            })
+        }
+
         utility.hideloading()
 
     }
@@ -233,57 +224,32 @@ const Users = ({ module }) => {
 
 
     async function loadData() {
-        var plantArray = [
-            // { value: "", label: "Select Storage Location", placeholder: true, disabled: true, selected: true },
-        ]
-        console.log(utility.get_keyvalue(constants.EMPLOYEE_PLANT));
-        Object.keys(fbc.PLANTS).map(key => {
-            plantArray.push({
-                value: key,
-                label: key + " | " + fbc.PLANTS[key]
-            })
-        })
 
-        let plantchoiceElem = new Choices($("#plantselect")[0], {
-            // addItems: true,
-            placeholder: true,
-            removeItemButton: false,
-            position: "bottom",
-            resetScrollPosition: false,
-            classNames: {
-                containerInner: "choices__inner bg-input-user text-dark fw-bold text-sm",
-                item: "choices__item pe-2 text-sm",
-            },
-            choices: plantArray,
-        })
-        plantchoiceElem.disable()
-        setplantchoices(plantchoiceElem)
-        var storagelocation = [{ value: "", label: "Select Storage Location", placeholder: true, disabled: true, selected: true },]
-        Object.keys(fbc.STORAGELOCATION).map(key => {
-            storagelocation.push({ value: key, label: key + " | " + fbc.STORAGELOCATION[key] })
+        var plant = [{ value: "", label: "Select Plant", placeholder: true, disabled: true, selected: true },]
+        Object.keys(fbc.PLANTCODES).map(key => {
+            plant.push({ value: key, label: fbc.PLANTCODES[key] })
         })
 
 
-        setstoragelocationchoices(
-            new Choices($("#storagelocationselect")[0], {
+        setplantchoices(
+            new Choices($("#plantselect")[0], {
                 addItems: true,
-                placeholderValue: "Select Storage Location",
-                removeItemButton: false,
-                position: "bottom",
+                placeholderValue: "Select Plants",
+                removeItemButton: true,
                 resetScrollPosition: false,
                 placeholderValue: "",
                 classNames: {
                     containerInner: "choices__inner bg-input-user text-dark fw-bold text-sm",
                     item: "choices__item pe-2 text-sm",
                 },
-                choices: storagelocation,
+                choices: plant,
             })
         );
         $("#employeestatusswitch").change(function () {
             if (this.checked) {
-                $("#employeestatus_text").text("User Active");
+                $("#employeestatus_text").text("Employee Active");
             } else {
-                $("#employeestatus_text").text("User In-Active");
+                $("#employeestatus_text").text("Employee In-Active");
             }
         });
 
@@ -340,8 +306,25 @@ const Users = ({ module }) => {
             // console.log("selectedModules : " + selectedModules);
         });
 
+        $(".webportal").change(function () {
+            setselectedWebportal((webportal) => {
+                var array = webportal
+                if (this.checked) {
+                    if (!array.includes(this.value)) {
+                        array.push(this.value);
+                    }
+                    return array;
+                } else {
+                    return (utility.removeItemAllFromArray(array, this.value))
+                }
+            })
+        });
 
-        getAllUsers()
+
+
+
+
+        getAllEmployees()
         setcontentModal(
             bootstrap.Modal.getOrCreateInstance($("#contentModal"), {
                 keyboard: false,
@@ -355,11 +338,9 @@ const Users = ({ module }) => {
 
 
     function clearAll() {
-        $(".form-control").val("")
         $(".form-control form-control-sm").val("")
-        selectedUserUID = ""
-        selectedUserDoc = null
-        storagelocationchoices.setChoiceByValue("")
+        selectedEmployeeUID = ""
+        selectedEmployeeDoc = null
         plantchoices.setChoiceByValue("")
         utility.enableinput("loginid")
         $("#employeestatusswitch").prop('checked', false).trigger('change');
@@ -369,7 +350,7 @@ const Users = ({ module }) => {
     }
 
 
-    const addnewUser = () => {
+    const addnewEmployee = () => {
         toggleModal()
     }
 
@@ -393,7 +374,7 @@ const Users = ({ module }) => {
     const checkifDataisCorrect = () => {
         $(".text-sm rounded form-control form-control-sm").removeClass("is-invalid");
 
-        console.log(storagelocationchoices.getValue(true));
+        console.log(plantchoices.getValue(true));
         if (utility.isInputEmpty('fullname')) {
             $("#fullname").addClass("is-invalid");
             var message = ("Please Add Full Name")
@@ -401,10 +382,10 @@ const Users = ({ module }) => {
             showsnackbar('error', message)
             return false;
         }
-        else if (utility.isInputEmpty('password') || utility.getinputValue("password").length < 6) {
-            $("#password").addClass("is-invalid");
-            var message = ("Please Add Password")
-            utility.showtippy('password', message, 'danger');
+        else if (utility.isInputEmpty('phonenumber')) {
+            $("#phonenumber").addClass("is-invalid");
+            var message = ("Please Add Phone Number")
+            utility.showtippy('phonenumber', message, 'danger');
             showsnackbar('error', message)
             return false;
         } else if (utility.isInputEmpty('loginid')) {
@@ -414,9 +395,9 @@ const Users = ({ module }) => {
             showsnackbar('error', message)
             return false;
         }
-        else if (storagelocationchoices.getValue(true) === "") {
-            var message = ("Please Select Valid Storage Location")
-            storagelocationchoices.showDropdown()
+        else if (plantchoices.getValue(true) === "") {
+            var message = ("Please Select Valid Plant")
+            plantchoices.showDropdown()
             showsnackbar('error', message)
             return false;
         }
@@ -436,14 +417,12 @@ const Users = ({ module }) => {
     }
 
 
-    const addorUpdateUser = async () => {
+    const addorUpdateEmployee = async () => {
         if (checkifDataisCorrect()) {
 
 
-            var useruid = selectedUserUID.length > 0 ? selectedUserUID : utility.randomstring() + "_" + utility.getTimestamp()
-
             var log = {
-                log: "User Added",
+                log: "Employee Added",
                 name: utility.get_keyvalue(constants.EMPLOYEE_FULLNAME),
                 username: utility.get_keyvalue(constants.EMPLOYEE_USERNAME),
                 date: utility.getDateandTime(),
@@ -451,37 +430,31 @@ const Users = ({ module }) => {
             }
 
             var userObject = {
-                useruid,
                 "name": (utility.getinputValue("fullname")).toLowerCase(),
-                "password": utility.getinputValue("password"),
+                "phonenumber": utility.getinputValue("phonenumber"),
                 "isactive": $('#employeestatusswitch').is(':checked'),
                 "isadmin": $('#adminstatusswitch').is(':checked'),
-                "storagelocation": storagelocationchoices.getValue(true),
                 "plant": plantchoices.getValue(true),
                 "accessmodules": selectedModules,
-                "log": arrayUnion(log),
+                log,
             }
 
-            if (selectedUserUID.length == 0) {
+            if (selectedEmployeeUID.length == 0) {
                 userObject["username"] = utility.getinputValue("loginid")
             }
             console.log(userObject);
 
             utility.showloading();
-
-            var ref = doc(collection(db, 'UsersDetails'), userObject.useruid)
-
-
-            try {
-                utility.hideloading()
-                await setDoc(ref, userObject, { merge: true })
-                utility.success_alert('User ' + (selectedUserUID.length > 0 ? "Updated" : "Added"), 'Details Added successfully.', 'OKAY', utility.reloadPage, null);
+            var addorUpdateEmployee = await RequestAddorUpdateUser(userObject, selectedEmployeeUID.length > 0, selectedEmployeeUID)
+            utility.hideloading();
+            console.log(addorUpdateEmployee);
+            if (addorUpdateEmployee.success) {
+                utility.success_alert('Employee ' + (selectedEmployeeUID.length > 0 ? "Updated" : "Added"), 'Details Added successfully.', 'OKAY', utility.reloadPage, null);
                 toggleModal()
-            } catch (error) {
-                var message = ("Failed To Add User, " + error.message)
+            } else {
+                var message = ("Failed To Add Employee, " + addorUpdateEmployee.message)
                 showsnackbar('error', message)
             }
-
         }
     }
 
@@ -491,23 +464,23 @@ const Users = ({ module }) => {
 
 
 
-
         < main className='d-flex flex-column min-vh-100' >
-            <Head title={"Users"} />
+            <Head title={"Employee Access"} />
+            <Sidebar />
 
             <div id="main" className="layout-navbar">
                 <header>
-                    <Navbar pagename={"Users"} />
+                    <Navbar pagename={"Employee Access"} />
                 </header>
                 <div id="main-content">
                     <div className="page-content">
-                        <section className="pc-container m-0 d-flex flex-column p-1">
-                            <div className="pcoded-content pb-5 d-flex flex-column flex-grow-1 p-1">
+                        <section className="pc-container d-flex flex-column p-1">
+                            <div className="pcoded-content  d-flex flex-column flex-grow-1 p-1">
                                 <div className="card flex-grow-1  border p-1 mb-0">
                                     <div className="card-header p-1">
 
                                         <div className="d-flex flex-row justify-content-between align-center">
-                                            <h5 className="my-auto ms-2 fs-6 text-dark">User Access</h5>
+                                            <h5 className="my-auto ms-2 fs-6 text-dark">Employee Access</h5>
 
 
                                             <div className="d-flex flex-row">
@@ -518,7 +491,7 @@ const Users = ({ module }) => {
                                                             type="text"
                                                             className="mb-0 text-sm rounded form-control form-control-sm border-0 bg-input-user text-dark"
                                                             id="searchbox"
-                                                            placeholder="Search User"
+                                                            placeholder="Search Employee"
                                                         />
                                                     </div>
 
@@ -526,7 +499,7 @@ const Users = ({ module }) => {
                                                 </div>
 
                                                 <button type="button"
-                                                    onClick={(e) => addnewUser()} className="fs-10 rounded btn btn-sm btn-success ">Add New User</button>
+                                                    onClick={(e) => addnewEmployee()} className="fs-10 rounded btn btn-sm btn-light-primary ">Add New Employee</button>
 
                                             </div>
 
@@ -535,15 +508,14 @@ const Users = ({ module }) => {
 
                                     </div>
                                     <div className="card-body px-1 py-2">
-                                        <div className='tablediv' style={{ height: "85vh" }}>
+                                        <div className='tablediv'>
                                             <table className="table  table-sm display compact nowrap table-hover table-bordered w-100" id="employeestable">
                                                 <thead>
                                                     <tr>
                                                         <th className="text-xs p-1">#</th>
                                                         <th className="text-xs p-1">Login ID</th>
                                                         <th className="text-xs p-1">Full Name</th>
-                                                        <th className="text-xs p-1">Password</th>
-                                                        <th className="text-xs p-1">Storage Location</th>
+                                                        <th className="text-xs p-1">Phone Number</th>
                                                         <th className="text-xs p-1">Status</th>
                                                         <th className="text-xs p-1">Action</th>
                                                     </tr>
@@ -553,7 +525,16 @@ const Users = ({ module }) => {
 
 
                                                 </tbody>
-
+                                                <tfoot>
+                                                    <tr>
+                                                        <th className="text-xs p-1">#</th>
+                                                        <th className="text-xs p-1">Login ID</th>
+                                                        <th className="text-xs p-1">Full Name</th>
+                                                        <th className="text-xs p-1">Phone Number</th>
+                                                        <th className="text-xs p-1">Status</th>
+                                                        <th className="text-xs p-1">Action</th>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -569,7 +550,7 @@ const Users = ({ module }) => {
                 <div className="modal-dialog modal-dialog-scrollable modal-xl" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="contentModalTitle">Add / Modify User Access</h5>
+                            <h5 className="modal-title" id="contentModalTitle">Add / Modify Employee Access</h5>
                             <button type="button" className="btn-close" onClick={(e) => toggleModal()} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
@@ -580,13 +561,14 @@ const Users = ({ module }) => {
                                         <input id="fullname" className="mb-0 bg-input-user  text-sm rounded form-control form-control-sm masterdata fw-bold" />
                                     </div>
                                     <div className="col-md-3 d-flex flex-column">
+                                        <label htmlFor="phonenumber" className="form-label text-muted mb-1 text-sm">Phone Number</label>
+                                        <input id="phonenumber" className="mb-0 bg-input-user  text-sm rounded form-control form-control-sm masterdata fw-bold" />
+                                    </div>
+                                    <div className="col-md-3 d-flex flex-column">
                                         <label htmlFor="loginid" className="form-label text-muted mb-1 text-sm">Login Username</label>
                                         <input id="loginid" className="mb-0 bg-input-user  text-sm rounded form-control form-control-sm masterdata fw-bold" />
                                     </div>
-                                    <div className="col-md-3 d-flex flex-column">
-                                        <label htmlFor="password" className="form-label text-muted mb-1 text-sm">Password</label>
-                                        <input id="password" className="mb-0 bg-input-user  text-sm rounded form-control form-control-sm masterdata fw-bold" />
-                                    </div>
+
                                 </div>
                                 <br />
 
@@ -599,23 +581,14 @@ const Users = ({ module }) => {
                                     </div>
 
                                 </div>
-                                <div className="row">
-                                    <div className="col-md-12 position-relative">
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor="storagelocationselect">Storage Location</label>
-                                            <select id="storagelocationselect"></select>
-                                        </div>
-                                    </div>
-
-                                </div>
 
                                 <div className="row">
                                     <div className="col-md-4">
                                         <div className="form-check form-switch switch-lg  ps-3 d-flex flex-row bg-light rounded border shadow-md mb-3">
                                             <input type="checkbox" className="form-check-input ms-0 input-light-success my-auto" id="employeestatusswitch" />
                                             <div className="d-flex flex-column ms-3 py-0 border-start ps-3 my-2">
-                                                <label className="form-check-label fs-6 mb-0" htmlFor="employeestatusswitch">User Status</label>
-                                                <label id="employeestatus_text" className="form-check-label text-muted mb-0" htmlFor="employeestatusswitch">User In-Active</label>
+                                                <label className="form-check-label fs-6 mb-0" htmlFor="employeestatusswitch">Employee Status</label>
+                                                <label id="employeestatus_text" className="form-check-label text-muted mb-0" htmlFor="employeestatusswitch">Employee In-Active</label>
                                             </div>
                                         </div>
                                     </div>
@@ -623,17 +596,24 @@ const Users = ({ module }) => {
                                         <div className="form-check form-switch switch-lg  ps-3 d-flex flex-row bg-light rounded border shadow-md mb-3">
                                             <input type="checkbox" className="form-check-input ms-0 input-light-success my-auto" id="adminstatusswitch" />
                                             <div className="d-flex flex-column ms-3 py-0 border-start ps-3 my-2">
-                                                <label className="form-check-label fs-6 mb-0" htmlFor="adminstatusswitch">User is Admin?</label>
+                                                <label className="form-check-label fs-6 mb-0" htmlFor="adminstatusswitch">Employee is Admin?</label>
                                                 <label id="adminstatus_text" className="form-check-label text-muted mb-0" htmlFor="adminstatusswitch">Admin Access Disabled</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="form-group mt-3 mx-0 border rounded p-2 ">
-                                    <label className="form-label">Access to Modules</label>
+                                    <label className="form-label">Access For Web Apps </label>
                                     <br />
                                     <div id="accesscheckboxdiv" className="d-flex flex-wrap flex-row">
+
+
+                                    </div>
+                                </div>
+                                <div className="form-group mt-3 mx-0 border rounded p-2 ">
+                                    <label className="form-label">Access to Masters</label>
+                                    <br />
+                                    <div id="uploadcheckboxdiv" className="d-flex flex-wrap flex-row">
 
 
                                     </div>
@@ -652,7 +632,7 @@ const Users = ({ module }) => {
                         </div>
                         <div className="modal-footer p-2">
                             <button type="button" className="btn btn-sm btn-light-secondary" onClick={(e) => toggleModal()}>Close</button>
-                            <button type="button" id="saveBtn" className="btn btn-sm  btn-success" onClick={(e) => addorUpdateUser()} >Save changes</button>
+                            <button type="button" id="saveBtn" className="btn btn-sm  btn-success" onClick={(e) => addorUpdateEmployee()} >Save changes</button>
                         </div>
                     </div>
                 </div>
@@ -664,10 +644,10 @@ const Users = ({ module }) => {
 }
 
 
-export default Users;
+export default Employees;
 
 export async function getStaticProps() {
     return {
-        props: { module: "USERMASTER", onlyAdminAccess: false }
+        props: { module: "EMPLOYEEMASTER", onlyAdminAccess: false }
     };
 }

@@ -7,12 +7,8 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
-    "lint": "next lint",
-    "firebasedeploy": "firebase use production && set NEXT_PUBLIC_ENVTYPE=prod&& next build && next export && firebase deploy --only hosting:sitename",
-    "devfirebasedeploy": "firebase use development && set NEXT_PUBLIC_ENVTYPE=dev&& next build && next export && firebase deploy --only hosting:sitename",
-    "firebasedeployapi": "firebase use production && set NEXT_PUBLIC_ENVTYPE=prod&& next build && next export && firebase deploy --only hosting:apisitename",
-    "devfirebasedeployapi": "firebase use development && set NEXT_PUBLIC_ENVTYPE=dev&& next build && next export && firebase deploy --only hosting:apisitename"
-  },
+    "lint": "next lint"
+    },
   "engines": {
     "node": "16"
   },

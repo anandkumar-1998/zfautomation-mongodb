@@ -18,8 +18,7 @@ import LoadingBox from "../components/loading";
 import AccessForbidden from "../components/accessforbidden";
 import SystemError from "../components/SystemError";
 import { SnackbarProvider } from "notistack";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { RequestLiveDate } from "../firebase/masterAPIS.js";
+import { RequestLiveDate } from "../apis/masterAPIS.js";
 
 const ACCESS = {
   ALLOWED: "ALLOWED",
@@ -58,7 +57,6 @@ function MyApp({ Component, pageProps }) {
     appendScript("../../../assets/themejs/bootstrap-datepickerv2.js");
     appendScript("../../../assets/themejs/plugins/inputmask.js");
     appendScript("../../../assets/themejs/plugins/jquery.inputmask.js");
-    appendScript("../../../assets/libraries/BrowserPrint-3.1.250.min.js");
     document.body.classList.add("minimenu");
 
     var tc = document.querySelectorAll(".pc-navbar li .pc-submenu");
@@ -66,7 +64,6 @@ function MyApp({ Component, pageProps }) {
       var c = tc[t];
       c.removeAttribute("style");
     }
-
 
     let multiselect = require('../libraries/jquery.multiselectv2.js');
     window.multiselect = multiselect;
@@ -87,28 +84,15 @@ function MyApp({ Component, pageProps }) {
       return;
     }
 
-    // setAccess(ACCESS.ALLOWED);
-    // if (router.pathname == "/login") {
-    //   window.location = "../home";
-    // }
-    // return
     isLoadingDate = true;
     utility.showloading()
-
-    // if (router.pathname !== "/") {
-    //   setAccess(ACCESS.ALLOWED);
-    // } else {
-    //   checkUserData();
-    // }
-
     var isIPCheckRequired = process.env.NEXT_PUBLIC_MODULETYPE !== 'MAILACTIONS'
     //  isIPCheckRequired = false  //<- only for akkshay
     var fetchLiveDate = await RequestLiveDate(isIPCheckRequired)
 
-    console.log(fetchLiveDate);
-    if (fetchLiveDate.status) {
+    if (fetchLiveDate.success) {
       var dateuid = fetchLiveDate.data
-      console.log("dateuid " + dateuid + " " + utility.getDateUID("MMM DD YYYY"));
+      // console.log("dateuid " + dateuid + " " + utility.getDateUID("MMM DD YYYY"));
       if (dateuid !== utility.getDateUID('MMM DD YYYY')) {
         errorMessage = ("Failed To Validate Request, Please Check Your System Date and Time")
         setAccess(ACCESS.ERROR)
@@ -138,12 +122,12 @@ function MyApp({ Component, pageProps }) {
       c.removeAttribute("style");
     }
     console.log({ user });
+    // setAccess(ACCESS.ALLOWED);
     if (user == "nothingfound" && router.pathname !== "/login") {
       utility.directSignout();
     } else {
       fetchLiveDate()
     }
-    // fetchLiveDate()
   }, [user]);
 
   useEffect(() => {
@@ -162,7 +146,7 @@ function MyApp({ Component, pageProps }) {
       document.onkeypress = function () {
         utility.store_newvalue("_idleSecondsCounter", 0);
       };
-      // window.setInterval(CheckIdleTime, 5000);
+      window.setInterval(CheckIdleTime, 5000);
     }
 
   }, [access]);
