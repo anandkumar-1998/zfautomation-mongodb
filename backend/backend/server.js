@@ -2,7 +2,7 @@ const app = require("./app");
 const http = require('http')
 const hashMap = require('hashmap')
 const dotenv = require("dotenv");
-const connectDatabase = require("./config/database")
+const {connectDatabase} = require("./config/database")
 
 
 let server = http.createServer(app);

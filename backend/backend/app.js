@@ -25,8 +25,10 @@ app.use(helmet());
 //route imports
 const systemRoute = require("./routes/systemRoute");
 const userRoute = require("./routes/userRoute");
+const ticketRoute = require("./routes/ticketRoute");
 app.use("/api/v1", userRoute);;
 app.use("/api/v1", systemRoute);
+app.use("/api/v1", ticketRoute);
 
 // Middleware for Errors
 app.use(errorMiddleware);
