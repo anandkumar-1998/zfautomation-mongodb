@@ -27,7 +27,8 @@ exports.addTicket = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getTickets = catchAsyncErrors(async (req, res, next) => {
-  let ticket = await Ticket.find();
+  let ticket = await Ticket.find({status: "OPEN"});
+  console.log("get ticket");
   res.status(200).json({
     data: ticket,
     success: true,
@@ -36,11 +37,12 @@ exports.getTickets = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.closedTicket = catchAsyncErrors(async (req, res, next) => {
-  let { id } = req.params;
+  let { id } = req.query;
   let client = getClient();
+  console.log('ticket closed ', id)
   const session = client.startSession();
   session.startTransaction();
-  let ticket = await Ticket.findOne({ id: id, session: session });
+  let ticket = await Ticket.findOne({ _id: id, session: session });
   console.log(ticket)
   if (ticket.status == "open" || ticket.status == "OPEN") {
     ticket.status = "closed";
@@ -52,6 +54,8 @@ exports.closedTicket = catchAsyncErrors(async (req, res, next) => {
       message: "ticket is closed",
     });
   } else {
+    session.abortTransaction();
+    session.endSession()
     res
       .status(200)
       .json({ success: false, message: "ticket is already been closed" });
