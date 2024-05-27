@@ -7,9 +7,7 @@ const errorMiddleware = require("./middleware/error");
 const helmet = require("helmet");
 
 app.use(express.json());
-app.use(cors({
-  origin: '*'
-}));
+app.use(cors({ origin: "*" }));
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -26,9 +24,13 @@ app.use(helmet());
 const systemRoute = require("./routes/systemRoute");
 const userRoute = require("./routes/userRoute");
 const ticketRoute = require("./routes/ticketRoute");
-app.use("/api/v1", userRoute);;
+const productRoute = require("./routes/productRoute");
+const orderRoute = require("./routes/orderRoute");
+app.use("/api/v1", userRoute);
 app.use("/api/v1", systemRoute);
 app.use("/api/v1", ticketRoute);
+app.use("/api/v1", productRoute);
+app.use("/api/v1", orderRoute);
 
 // Middleware for Errors
 app.use(errorMiddleware);

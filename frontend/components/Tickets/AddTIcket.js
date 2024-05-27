@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import TicketComponent from './TicketComponent'
 import AllTicket from './AllTicket'
-import { RequestTicket } from '../../apis/masterAPIS';
+import { RequestOrder, RequestTicket } from '../../apis/masterAPIS';
 
 export default function AddTIcket() {
   const [ticket, setTicket] = React.useState([]);
@@ -14,6 +14,11 @@ export default function AddTIcket() {
     setShow(true);
   };
 
+  const handleClick = ()=>{
+    console.log("clicked")
+    RequestOrder();
+  }
+
   useEffect(()=>{
     getTickets()
   },[])
@@ -21,14 +26,14 @@ export default function AddTIcket() {
     <div>
       <div className='d-flex justify-content-between align-items-center'>
         <div>Ticket System</div>
-        <div className='btn btn-outline-primary'>Add Ticket</div>
+        <button onClick={()=>handleClick()} className='btn btn-outline-primary'>Add Ticket</button>
 
       </div>
       <div className='d-flex justify-content-center align-items-center mt-3'>
          <TicketComponent />
       </div>
       <div className=''>
-        <AllTicket show={show} ticket={ticket} />
+        {/* <AllTicket show={show} ticket={ticket} /> */}
       </div>
     </div>
   )

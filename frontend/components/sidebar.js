@@ -19,11 +19,11 @@ const Sidebar = () => {
 
 
   useEffect(() => {
-    if (userModules.length === 0) { return; }
+    // if (userModules.length === 0) { return; }
 
-    if (utility.get_keyvalue(constants.EMPLOYEE_FULLNAME) == "nothingfound") {
-      return
-    }
+    // if (utility.get_keyvalue(constants.EMPLOYEE_FULLNAME) == "nothingfound") {
+    //   return
+    // }
 
 
     addModuleSidebar("Masters", fbc.MASTERMODULE, "ri-settings-4-fill")

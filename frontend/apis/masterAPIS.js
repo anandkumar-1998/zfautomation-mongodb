@@ -1,3 +1,4 @@
+import { error } from "jquery";
 import { DB_APIURL, EMPLOYEE_TOKEN } from "../constants/appconstants";
 import { get_keyvalue } from "../libraries/utility";
 const axios = require("axios").default;
@@ -209,15 +210,38 @@ export const RequestTicket = async () => {
 export const RequestTicketClosed = async (id) => {
   console.log("api - ", id);
   return await axios
-  .post(DB_APIURL + "ticket-closed"+`?id=${id}`)
-  .then(function(res){
-    console.log(res.data);
-    return res.data;
-  }).catch(function (error) {
-    return {
-      status: false,
-      data: "",
-      message: error.response?.message || "",
-    };
-  })
+    .post(DB_APIURL + "ticket-closed" + `?id=${id}`)
+    .then(function (res) {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch(function (error) {
+      return {
+        status: false,
+        data: "",
+        message: error.response?.message || "",
+      };
+    });
+};
+
+export const RequestOrder = async () => {
+  return axios
+    .post(DB_APIURL + "create-order", {
+      item: 1,
+      productId: ["PROD0595576"],
+      qty: [2],
+      total_price: 250,
+      order_address: "Patna, Bihar 8000008",
+    })
+    .then(function (res) {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch(function (error) {
+      return {
+        status: false,
+        data: "",
+        message: error.response?.message || "",
+      };
+    });
 };
