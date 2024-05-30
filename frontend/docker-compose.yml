@@ -1,0 +1,9 @@
+services:
+    frontend:
+        container_name: frontend
+        build: .
+        ports:
+          - 3000:3000
+        restart: always
+        environment:
+            NEXT_PUBLIC_ENVTYPE: prod

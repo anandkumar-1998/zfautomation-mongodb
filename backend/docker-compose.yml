@@ -1,0 +1,13 @@
+services:
+    backend: 
+        container_name: backend
+        build: .
+        ports: 
+          - 3030:3030
+        restart: always
+        environment:
+          DB_IP: "192.168.62.97"
+          DB_PORT: "27017"
+          DB_BASENAME: "nidestertestingDB"
+          ENVTYPE: "prod"
+          PORT: 3030

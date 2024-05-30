@@ -36,4 +36,15 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
+orderSchema.post('save', async function(doc){
+  console.log("creating the order: ", doc)
+})
+
+
+orderSchema.post("findOneAndUpdate", async function(doc){
+  let order = mongoose.model("Order", orderSchema);
+  console.log("updating the order: ",await order.findById(doc._id));
+})
+
+
 module.exports = mongoose.model("Order", orderSchema);

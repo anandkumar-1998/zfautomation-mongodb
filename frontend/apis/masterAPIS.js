@@ -1,4 +1,3 @@
-import { error } from "jquery";
 import { DB_APIURL, EMPLOYEE_TOKEN } from "../constants/appconstants";
 import { get_keyvalue } from "../libraries/utility";
 const axios = require("axios").default;
@@ -225,17 +224,16 @@ export const RequestTicketClosed = async (id) => {
 };
 
 export const RequestOrder = async () => {
-  return axios
-    .post(DB_APIURL + "create-order", {
+  return await axios.post(DB_APIURL + "create-order", {
       item: 1,
-      productId: ["PROD0595576"],
+      productId: ["PROD5388565"],
       qty: [2],
       total_price: 250,
-      order_address: "Patna, Bihar 8000008",
+      order_address: "Patna, Bihar 2 8000008",
     })
     .then(function (res) {
       console.log(res.data);
-      return res.data;
+      // return res.data;
     })
     .catch(function (error) {
       return {

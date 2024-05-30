@@ -30,6 +30,7 @@
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-double": "^0.0.1",
     "mongoose-unique-validator": "^3.0.0",
+    "morgan": "^1.10.0",
     "n-digit-token": "^2.2.2",
     "nodemon": "^2.0.22",
     "socket.io": "^4.4.0",
