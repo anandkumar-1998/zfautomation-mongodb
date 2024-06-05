@@ -226,7 +226,7 @@ export const RequestTicketClosed = async (id) => {
 export const RequestOrder = async () => {
   return await axios.post(DB_APIURL + "create-order", {
       item: 1,
-      productId: ["PROD5388565"],
+      productId: ["PROD9363286"],
       qty: [2],
       total_price: 250,
       order_address: "Patna, Bihar 2 8000008",
